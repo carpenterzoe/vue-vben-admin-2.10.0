@@ -7,7 +7,8 @@ const commonConfig: UserConfig = {
     host: true,
   },
   esbuild: {
-    drop: ['console', 'debugger'],
+    // 配置加上之后开发环境不能调试了 所以先去掉
+    // drop: ['console', 'debugger'],
   },
   build: {
     reportCompressedSize: false,

@@ -110,12 +110,17 @@ export const useUserStore = defineStore({
         this.setSessionTimeout(false);
       } else {
         const permissionStore = usePermissionStore();
+        
+        // 避免重复添加
         if (!permissionStore.isDynamicAddedRoute) {
           const routes = await permissionStore.buildRoutesAction();
           routes.forEach((route) => {
             router.addRoute(route as unknown as RouteRecordRaw);
           });
+          // 前面的 routes 优先匹配，匹配完了还没有 再匹配 404
           router.addRoute(PAGE_NOT_FOUND_ROUTE as unknown as RouteRecordRaw);
+          
+          // 避免重复添加
           permissionStore.setDynamicAddedRoute(true);
         }
         goHome && (await router.replace(userInfo?.homePath || PageEnum.BASE_HOME));
@@ -125,9 +130,10 @@ export const useUserStore = defineStore({
     async getUserInfoAction(): Promise<UserInfo | null> {
       if (!this.getToken) return null;
       const userInfo = await getUserInfo();
-      const { roles = [] } = userInfo;
+      let { role = [] } = userInfo;
+       const roles = JSON.parse(role)
       if (isArray(roles)) {
-        const roleList = roles.map((item) => item.value) as RoleEnum[];
+        const roleList = roles.map((item) => item) as RoleEnum[];
         this.setRoleList(roleList);
       } else {
         userInfo.roles = [];

@@ -149,10 +149,43 @@ export const usePermissionStore = defineStore({
 
       }
 
+      const convertMenuTree = (menuList) => {
+        let menus = []
 
+        menuList.forEach((menu) => {
+          if (menu.meta) {
+            try {
+              menu.meta  = JSON.parse(menu.meta)
+            } catch (error) {
+              console.log('error: ', error);
+            }
+          }
+
+          if (menu.pid === 0) {
+            menus.push(menu)
+          } else {
+            menus.find((fatherMenu) => {
+              if (fatherMenu.id === menu.pid) {
+                if (!fatherMenu.children) {
+                  fatherMenu.children = []
+                }
+                fatherMenu.children.push(menu)
+              }
+            }) 
+          }
+        })
+
+        return menus
+      }
+
+      const getAllMenuData = () => {
+        return getAllMenu().then(menu => {
+          return convertMenuTree(menu)
+        })
+      }
 
       // let backendRouteList = JSON.stringify(asyncRoutes) 
-      let backendRouteList = await getAllMenu()
+      let backendRouteList = await getAllMenuData()
       backendRouteList = wrapperRouteComponent(backendRouteList)
 
       /**

@@ -1,7 +1,6 @@
 import { BasicColumn, FormSchema } from '/@/components/Table';
 import { h } from 'vue';
 import { Tag } from 'ant-design-vue';
-import Icon from '@/components/Icon/Icon.vue';
 
 export const columns: BasicColumn[] = [
   {
@@ -17,6 +16,7 @@ export const columns: BasicColumn[] = [
   {
     title: '重定向',
     dataIndex: 'redirect',
+    width: 200,
   },
   {
     title: '元数据',
@@ -24,11 +24,11 @@ export const columns: BasicColumn[] = [
   },
   {
     title: '状态',
-    dataIndex: 'status',
+    dataIndex: 'active',
     width: 80,
     customRender: ({ record }) => {
-      const status = record.active;
-      const enable = ~~status === 1;
+      const active = record.active;
+      const enable = ~~active === 1;
       const color = enable ? 'green' : 'red';
       const text = enable ? '启用' : '停用';
       return h(Tag, { color: color }, () => text);

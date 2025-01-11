@@ -5,7 +5,7 @@
         :class="`${prefixCls}__header-form`"
         :labelWidth="100"
         :schemas="schemas"
-        :showActionButtonGroup="false"
+        @submit="handleSearch"
       />
     </template>
 
@@ -49,16 +49,22 @@
           </a-list-item>
         </template>
       </a-list>
+
+      <a-pagination v-model:current="current" :total="50" show-less-items />
     </div>
   </PageWrapper>
 </template>
 <script lang="ts">
-  import { Tag, List } from 'ant-design-vue';
+  import { Tag, List, Pagination } from 'ant-design-vue';
   import { defineComponent } from 'vue';
   import Icon from '@/components/Icon/Icon.vue';
   import { BasicForm } from '/@/components/Form/index';
   import { actions, searchList, schemas } from './data';
   import { PageWrapper } from '/@/components/Page';
+
+  const handleSearch = (e) => {
+    console.log('e: ', e);
+  }
 
   export default defineComponent({
     components: {
@@ -69,6 +75,7 @@
       [List.name]: List,
       [List.Item.name]: List.Item,
       AListItemMeta: List.Item.Meta,
+      [Pagination.name]: Pagination,
     },
     setup() {
       return {
@@ -76,6 +83,7 @@
         list: searchList,
         actions,
         schemas,
+        handleSearch,
       };
     },
   });

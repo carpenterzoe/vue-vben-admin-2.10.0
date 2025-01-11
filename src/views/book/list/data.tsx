@@ -22,7 +22,7 @@ export const actions: any[] = [
 
 export const schemas: FormSchema[] = [
   {
-    field: 'name',
+    field: 'title',
     component: 'InputSearch',
     label: '书名',
     colProps: {

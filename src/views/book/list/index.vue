@@ -13,24 +13,20 @@
       <a-list>
         <template v-for="item in list" :key="item.id">
           <a-list-item>
+             <template #extra>
+              <img
+                width="110"
+                alt="logo"
+                :src="`https://www.youbaobao.xyz/book/res/img/${item.cover}`"
+              />
+            </template>
             <a-list-item-meta>
               <template #description>
                 <div :class="`${prefixCls}__content`">
                   {{ item.content }}
                 </div>
                 <div :class="`${prefixCls}__action`">
-                  <template v-for="action in actions" :key="action.icon">
-                    <div :class="`${prefixCls}__action-item`">
-                      <Icon
-                        v-if="action.icon"
-                        :class="`${prefixCls}__action-icon`"
-                        :icon="action.icon"
-                        :color="action.color"
-                      />
-                      {{ action.text }}
-                    </div>
-                  </template>
-                  <span :class="`${prefixCls}__time`">{{ item.time }}</span>
+                  {{ item.author }}
                 </div>
               </template>
               <template #title>
@@ -50,21 +46,18 @@
         </template>
       </a-list>
 
-      <a-pagination v-model:current="current" :total="50" show-less-items />
+      <a-pagination @change="handleSearch" v-model:current="current" :total="50" show-less-items />
     </div>
   </PageWrapper>
 </template>
 <script lang="ts">
   import { Tag, List, Pagination } from 'ant-design-vue';
-  import { defineComponent } from 'vue';
+  import { defineComponent, ref, onMounted } from 'vue';
   import Icon from '@/components/Icon/Icon.vue';
   import { BasicForm } from '/@/components/Form/index';
   import { actions, searchList, schemas } from './data';
   import { PageWrapper } from '/@/components/Page';
-
-  const handleSearch = (e) => {
-    console.log('e: ', e);
-  }
+  import { getBookList } from '@/api/book/menu'
 
   export default defineComponent({
     components: {
@@ -78,12 +71,33 @@
       [Pagination.name]: Pagination,
     },
     setup() {
+      const list = ref()
+      const current = ref(1)
+      const total = ref(0)
+
+      const handleSearch = (inputData = {}) => {
+        const { title, author } = inputData
+        const params = {
+          pageNum: current.value,
+          pageSize: 10,
+          title: title || '',
+          author: author || '',
+        }
+        getBookList(params).then((res) => {
+          list.value = res
+        })
+      }
+
+      onMounted(() => handleSearch())
+
       return {
+        list,
+        current,
+        handleSearch,
+
         prefixCls: 'list-search',
-        list: searchList,
         actions,
         schemas,
-        handleSearch,
       };
     },
   });

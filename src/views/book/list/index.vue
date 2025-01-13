@@ -46,7 +46,7 @@
         </template>
       </a-list>
 
-      <a-pagination @change="handleSearch" v-model:current="current" :total="50" show-less-items />
+      <a-pagination @change="handleSearch" v-model:current="current" :total="total" show-less-items />
     </div>
   </PageWrapper>
 </template>
@@ -84,7 +84,8 @@
           author: author || '',
         }
         getBookList(params).then((res) => {
-          list.value = res
+          list.value = res.data
+          total.value = res.total
         })
       }
 
@@ -93,6 +94,7 @@
       return {
         list,
         current,
+        total,
         handleSearch,
 
         prefixCls: 'list-search',

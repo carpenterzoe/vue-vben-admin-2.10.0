@@ -12,8 +12,12 @@ enum Api {
   User = '/user'
 }
 
-export function getUserList() {
-  return defHttp.get<GetUserInfoModel>({ url: Api.User }, { errorMessageMode: 'none' });
+export function getUserList(params) {
+  return defHttp.get<GetUserInfoModel>({ url: Api.User, params }, { errorMessageMode: 'none' });
+}
+
+export function addUser(data) {
+  return defHttp.post<GetUserInfoModel>({ url: Api.User, data });
 }
 
 /**

@@ -29,6 +29,7 @@
   import { BasicTree, TreeItem } from '/@/components/Tree';
 
   import { getMenuList } from '/@/api/demo/system';
+  import { addUser } from '/@/api/sys/user';
 
   export default defineComponent({
     name: 'RoleDrawer',
@@ -41,7 +42,7 @@
       const [registerForm, { resetFields, setFieldsValue, validate }] = useForm({
         labelWidth: 90,
         baseColProps: { span: 24 },
-        schemas: formSchema,
+        schemas: formSchema(false),
         showActionButtonGroup: false,
       });
 
@@ -61,14 +62,13 @@
         }
       });
 
-      const getTitle = computed(() => (!unref(isUpdate) ? '新增角色' : '编辑角色'));
+      const getTitle = computed(() => (!unref(isUpdate) ? '新增用户' : '编辑用户'));
 
       async function handleSubmit() {
         try {
           const values = await validate();
           setDrawerProps({ confirmLoading: true });
-          // TODO custom api
-          console.log(values);
+          await addUser(values)
           closeDrawer();
           emit('success');
         } finally {

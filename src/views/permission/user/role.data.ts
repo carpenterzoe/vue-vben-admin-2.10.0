@@ -28,7 +28,7 @@ export const columns: BasicColumn[] = [
     dataIndex: 'role',
     width: 150,
     customRender: ({ record }) => {
-      const role = JSON.parse(record.role || []);
+      const role = record.role ? JSON.parse(record.role) : [];
       return h('div', {}, role.join(', '));
     },
   },
@@ -89,6 +89,13 @@ export const formSchema = (isUpdate): FormSchema[] => {
       },
     },
     {
+      field: 'password',
+      label: '密码',
+      required: true,
+      component: 'InputPassword',
+      ifShow: () => !unref(isUpdate),
+    },
+    {
       field: 'nickname',
       label: '昵称',
       required: true,
@@ -119,13 +126,5 @@ export const formSchema = (isUpdate): FormSchema[] => {
       slot: 'menu',
       component: 'Input',
     },
-    {
-      field: 'password',
-      label: '密码',
-      required: true,
-      component: 'InputPassword',
-      ifShow: () => !unref(isUpdate),
-    },
-    
   ];
 };

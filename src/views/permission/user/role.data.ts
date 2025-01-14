@@ -45,22 +45,6 @@ export const columns: BasicColumn[] = [
         checkedChildren: '已启用',
         unCheckedChildren: '已禁用',
         loading: record.pendingStatus,
-        // onChange(checked: boolean) {
-        //   record.pendingStatus = true;
-        //   const newStatus = checked ? '1' : '0';
-        //   const { createMessage } = useMessage();
-        //   setRoleStatus(record.id, newStatus)
-        //     .then(() => {
-        //       record.status = newStatus;
-        //       createMessage.success(`已成功修改角色状态`);
-        //     })
-        //     .catch(() => {
-        //       createMessage.error('修改角色状态失败');
-        //     })
-        //     .finally(() => {
-        //       record.pendingStatus = false;
-        //     });
-        // },
       });
     },
   },

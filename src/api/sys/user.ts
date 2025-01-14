@@ -20,6 +20,10 @@ export function addUser(data) {
   return defHttp.post<GetUserInfoModel>({ url: Api.User, data });
 }
 
+export function editUser(data) {
+  return defHttp.put<GetUserInfoModel>({ url: Api.User, data });
+}
+
 /**
  * @description: user login api
  */

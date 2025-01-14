@@ -32,7 +32,7 @@ const permission: AppRouteModule = {
         title: t('routes.demo.permission.user'),
         ignoreKeepAlive: true,
       },
-      component: () => import('/@/views/permission/menu/index.vue'),
+      component: () => import('/@/views/permission/user/index.vue'),
     },
     {
       path: 'role',
@@ -41,7 +41,7 @@ const permission: AppRouteModule = {
         title: t('routes.demo.permission.role'),
         ignoreKeepAlive: true,
       },
-      component: () => import('/@/views/permission/menu/index.vue'),
+      component: () => import('/@/views/permission/role/index.vue'),
     },
     {
       path: 'permission',

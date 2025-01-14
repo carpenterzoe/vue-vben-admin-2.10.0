@@ -149,6 +149,9 @@ export default {
   permission: {
     permission: 'Permission',
     menu: 'menu',
+    user: 'user',
+    role: 'role',
+    permission: 'permission',
 
     front: 'front-end',
     frontPage: 'Page',

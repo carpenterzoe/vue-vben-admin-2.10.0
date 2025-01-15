@@ -18,7 +18,7 @@ enum Api {
   DeptList = '/system/getDeptList',
   setRoleStatus = '/system/setRoleStatus',
   MenuList = '/menu',
-  RolePageList = '/system/getRoleListByPage',
+  RolePageList = '/role',
   GetAllRoleList = '/system/getAllRoleList',
 }
 

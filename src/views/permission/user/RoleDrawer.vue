@@ -12,7 +12,7 @@
         <BasicTree
           v-model:value="model[field]"
           :treeData="treeData"
-          :fieldNames="{ title: 'menuName', key: 'id' }"
+          :fieldNames="{ title: 'name', key: 'id' }"
           checkable
           toolbar
           title="角色列表"
@@ -28,7 +28,7 @@
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
   import { BasicTree, TreeItem } from '/@/components/Tree';
 
-  import { getMenuList } from '/@/api/demo/system';
+  import { getRoleListByPage } from '/@/api/demo/system';
   import { addUser, editUser } from '/@/api/sys/user';
 
   export default defineComponent({
@@ -51,7 +51,7 @@
         setDrawerProps({ confirmLoading: false });
         // 需要在setFieldsValue之前先填充treeData，否则Tree组件可能会报key not exist警告
         if (unref(treeData).length === 0) {
-          treeData.value = (await getMenuList()) as any as TreeItem[];
+          treeData.value = (await getRoleListByPage()) as any as TreeItem[];
         }
         isUpdate.value = !!data?.isUpdate;
 
@@ -69,11 +69,16 @@
           const values = await validate();
           setDrawerProps({ confirmLoading: true });
 
+          const params = {
+            ...values,
+            role: JSON.stringify(values.role.map(id => treeData.value.find(tree => tree.id === id).name))
+          }
+
           const update = unref(isUpdate)
           if (update) {
-            const res = await editUser(values)
+            const res = await editUser(params)
           } else {
-            const res = await addUser(values)
+            const res = await addUser(params)
           }
 
           closeDrawer();

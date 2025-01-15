@@ -20,6 +20,8 @@ enum Api {
   MenuList = '/menu',
   RolePageList = '/role',
   GetAllRoleList = '/system/getAllRoleList',
+  createRole = '/role',
+  addRoleMenu = '/role/role_menu'
 }
 
 export const getAccountList = (params: AccountParams) =>
@@ -34,6 +36,15 @@ export const getMenuList = (params?: MenuParams) =>
 export const getRoleListByPage = (params?: RolePageParams) =>
   defHttp.get<RolePageListGetResultModel>({ url: Api.RolePageList, params });
 
+export const createRole = (params?: RolePageParams) =>
+  defHttp.post<RolePageListGetResultModel>({ url: Api.createRole, params });
+
+export const editRole = (params?: RolePageParams) =>
+  defHttp.put<RolePageListGetResultModel>({ url: Api.createRole, params });
+
+export const addRoleMenu = (params?: RolePageParams) =>
+  defHttp.post<RolePageListGetResultModel>({ url: Api.addRoleMenu, params });
+  
 export const getAllRoleList = (params?: RoleParams) =>
   defHttp.get<RoleListGetResultModel>({ url: Api.GetAllRoleList, params });
 

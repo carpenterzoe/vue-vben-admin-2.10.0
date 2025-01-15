@@ -44,6 +44,12 @@ export const editRole = (params?: RolePageParams) =>
 
 export const addRoleMenu = (params?: RolePageParams) =>
   defHttp.post<RolePageListGetResultModel>({ url: Api.addRoleMenu, params });
+
+export const getRoleMenu = (params?: RolePageParams) =>
+  defHttp.get<RolePageListGetResultModel>({ url: Api.addRoleMenu, params });
+  
+export const deleteRoleMenu = (data?: RolePageParams) =>
+  defHttp.delete<RolePageListGetResultModel>({ url: Api.addRoleMenu, data });
   
 export const getAllRoleList = (params?: RoleParams) =>
   defHttp.get<RoleListGetResultModel>({ url: Api.GetAllRoleList, params });

@@ -28,7 +28,7 @@
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
   import { BasicTree, TreeItem } from '/@/components/Tree';
 
-  import { createRole, editRole, addRoleMenu } from '/@/api/demo/system';
+  import { createRole, editRole, addRoleMenu, getRoleMenu, deleteRoleMenu } from '/@/api/demo/system';
   import { getAllMenu } from '/@/api/sys/menu';
 
   export default defineComponent({
@@ -38,6 +38,7 @@
     setup(_, { emit }) {
       const isUpdate = ref(true);
       const treeData = ref<TreeItem[]>([]);
+      const roleId = ref()
 
       const [registerForm, { resetFields, setFieldsValue, validate }] = useForm({
         labelWidth: 90,
@@ -56,6 +57,10 @@
         isUpdate.value = !!data?.isUpdate;
 
         if (unref(isUpdate)) {
+          roleId.value = data.record.id 
+
+          const list = await getRoleMenu({ roleId: data.record.id })
+          data.record.menu = list.map(item => item.menuId)
           setFieldsValue({
             ...data.record,
           });
@@ -73,6 +78,17 @@
           const update = unref(isUpdate)
           if (update) {
             const res = await editRole(values)
+            await deleteRoleMenu({ roleId:  roleId.value })
+
+            const { menu = [] } = values
+              for (let menuId of menu) {
+                const params = {
+                  roleId:  roleId.value,
+                  menuId
+                }
+                addRoleMenu(params)
+              }
+
           } else {
             const res = await createRole(values)
 

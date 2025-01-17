@@ -18,6 +18,17 @@
           title="菜单分配"
         />
       </template>
+
+      <template #auth="{ model, field }">
+        <BasicTree
+          v-model:value="model[field]"
+          :treeData="authData"
+          :fieldNames="{ title: 'name', key: 'id' }"
+          checkable
+          toolbar
+          title="权限分配"
+        />
+      </template>
     </BasicForm>
   </BasicDrawer>
 </template>
@@ -28,7 +39,11 @@
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
   import { BasicTree, TreeItem } from '/@/components/Tree';
 
-  import { createRole, editRole, addRoleMenu, getRoleMenu, deleteRoleMenu } from '/@/api/demo/system';
+  import { createRole, editRole, addRoleMenu, getRoleMenu, deleteRoleMenu,
+    getAuthList,
+    addRoleAuth,
+    getRoleAuthByRoleId,
+  } from '/@/api/demo/system';
   import { getAllMenu } from '/@/api/sys/menu';
 
   export default defineComponent({
@@ -39,6 +54,7 @@
       const isUpdate = ref(true);
       const treeData = ref<TreeItem[]>([]);
       const roleId = ref()
+      const authData = ref<TreeItem[]>([]);
 
       const [registerForm, { resetFields, setFieldsValue, validate }] = useForm({
         labelWidth: 90,
@@ -54,13 +70,21 @@
         if (unref(treeData).length === 0) {
           treeData.value = (await getAllMenu()) as any as TreeItem[];
         }
+
+        if (unref(authData).length === 0) {
+          authData.value = (await getAuthList()) as any as TreeItem[];
+        }
         isUpdate.value = !!data?.isUpdate;
 
         if (unref(isUpdate)) {
-          roleId.value = data.record.id 
+          roleId.value = data.record.id
 
           const list = await getRoleMenu({ roleId: data.record.id })
           data.record.menu = list.map(item => item.menuId)
+
+          const authList = await getRoleAuthByRoleId({ roleId: data.record.id })
+          data.record.auth = authList.map(item => item.authId)
+
           setFieldsValue({
             ...data.record,
           });
@@ -74,36 +98,34 @@
           const values = await validate();
           setDrawerProps({ confirmLoading: true });
           
-
           const update = unref(isUpdate)
+
+          let curRoleId = null
+          // 角色本身内容update 
           if (update) {
             const res = await editRole(values)
             await deleteRoleMenu({ roleId:  roleId.value })
-
-            const { menu = [] } = values
-              for (let menuId of menu) {
-                const params = {
-                  roleId:  roleId.value,
-                  menuId
-                }
-                addRoleMenu(params)
-              }
-
           } else {
             const res = await createRole(values)
-
-            if (res) {
-              const { id: roleId } = res
-              const { menu = [] } = values
-              for (let menuId of menu) {
-                const params = {
-                  roleId,
-                  menuId
-                }
-                addRoleMenu(params)
-              }
-            }
+            curRoleId = res.id
           }
+
+          const { menu = [], auth = [] } = values
+
+          // 角色和菜单 绑定关系
+          for (let menuId of menu) {
+              const params = {
+                roleId:  roleId.value || curRoleId,
+                menuId
+              }
+              addRoleMenu(params)
+            }
+
+          // 角色和权限 绑定关系
+          addRoleAuth({
+            roleId:  roleId.value || curRoleId,
+            auth,
+          })
 
           closeDrawer();
           emit('success');
@@ -118,6 +140,7 @@
         getTitle,
         handleSubmit,
         treeData,
+        authData,
       };
     },
   });

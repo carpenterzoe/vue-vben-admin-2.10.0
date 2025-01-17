@@ -58,4 +58,10 @@ export const formSchema: FormSchema[] = [
     slot: 'menu',
     component: 'Input',
   },
+  {
+    label: ' ',
+    field: 'auth',
+    slot: 'auth',
+    component: 'Input',
+  },
 ];

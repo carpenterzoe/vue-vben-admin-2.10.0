@@ -22,7 +22,8 @@ enum Api {
   GetAllRoleList = '/system/getAllRoleList',
   createRole = '/role',
   addRoleMenu = '/role/role_menu',
-  AuthList = '/permission'
+  AuthList = '/permission',
+  RoleAuth = '/role/role_auth'
 }
 
 export const deleteAuth = (params) =>
@@ -32,6 +33,12 @@ export const addAuth = (data) =>
   defHttp.post<AccountListGetResultModel>({ url: Api.AuthList, data });
 export const editAuth = (data) =>
   defHttp.put<AccountListGetResultModel>({ url: Api.AuthList, data });
+
+export const addRoleAuth = (data) =>
+  defHttp.post<AccountListGetResultModel>({ url: Api.RoleAuth, data });
+
+export const getRoleAuthByRoleId = (params?: RolePageParams) =>
+  defHttp.get<RolePageListGetResultModel>({ url: Api.RoleAuth, params });
 
 export const getAuthList = (params) =>
   defHttp.get<AccountListGetResultModel>({ url: Api.AuthList, params });

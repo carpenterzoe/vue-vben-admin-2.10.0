@@ -21,8 +21,17 @@ enum Api {
   RolePageList = '/role',
   GetAllRoleList = '/system/getAllRoleList',
   createRole = '/role',
-  addRoleMenu = '/role/role_menu'
+  addRoleMenu = '/role/role_menu',
+  AuthList = '/permission'
 }
+
+export const addAuth = (data) =>
+  defHttp.post<AccountListGetResultModel>({ url: Api.AuthList, data });
+export const editAuth = (data) =>
+  defHttp.put<AccountListGetResultModel>({ url: Api.AuthList, data });
+
+export const getAuthList = (params) =>
+  defHttp.get<AccountListGetResultModel>({ url: Api.AuthList, params });
 
 export const getAccountList = (params: AccountParams) =>
   defHttp.get<AccountListGetResultModel>({ url: Api.AccountList, params });

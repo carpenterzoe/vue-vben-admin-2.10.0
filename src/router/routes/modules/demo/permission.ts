@@ -50,7 +50,7 @@ const permission: AppRouteModule = {
         title: t('routes.demo.permission.permission'),
         ignoreKeepAlive: true,
       },
-      component: () => import('/@/views/permission/menu/index.vue'),
+      component: () => import('/@/views/permission/permission/index.vue'),
     },
     {
       path: 'front',

@@ -25,6 +25,9 @@ enum Api {
   AuthList = '/permission'
 }
 
+export const deleteAuth = (params) =>
+  defHttp.delete<AccountListGetResultModel>({ url: Api.AuthList, params });
+
 export const addAuth = (data) =>
   defHttp.post<AccountListGetResultModel>({ url: Api.AuthList, data });
 export const editAuth = (data) =>

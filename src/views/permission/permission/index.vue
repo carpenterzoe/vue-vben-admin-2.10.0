@@ -33,7 +33,7 @@
   import { defineComponent } from 'vue';
 
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
-  import { getAuthList } from '/@/api/demo/system';
+  import { getAuthList, deleteAuth } from '/@/api/demo/system';
 
   import { useDrawer } from '/@/components/Drawer';
   import RoleDrawer from './RoleDrawer.vue';
@@ -80,7 +80,8 @@
       }
 
       function handleDelete(record: Recordable) {
-        console.log(record);
+        const { id } = record
+        deleteAuth({id}).then(reload)
       }
 
       function handleSuccess() {

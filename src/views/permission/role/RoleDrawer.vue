@@ -103,29 +103,14 @@
           let curRoleId = null
           // 角色本身内容update 
           if (update) {
-            const res = await editRole(values)
-            await deleteRoleMenu({ roleId:  roleId.value })
+            const res = await editRole({
+              ...values,
+              id:  roleId.value
+            })
           } else {
             const res = await createRole(values)
             curRoleId = res.id
           }
-
-          const { menu = [], auth = [] } = values
-
-          // 角色和菜单 绑定关系
-          for (let menuId of menu) {
-              const params = {
-                roleId:  roleId.value || curRoleId,
-                menuId
-              }
-              addRoleMenu(params)
-            }
-
-          // 角色和权限 绑定关系
-          addRoleAuth({
-            roleId:  roleId.value || curRoleId,
-            auth,
-          })
 
           closeDrawer();
           emit('success');
